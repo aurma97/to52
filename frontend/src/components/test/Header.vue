@@ -39,6 +39,9 @@
                                 <router-link class="navbar-item" to="/mon-compte" exact>
                                     <i class="fas fa-user-circle"></i>&nbsp;&nbsp;Mon compte
                                 </router-link>
+                                <router-link class="navbar-item" to="/mes-annonces" exact>
+                                    <i class="fas fa-info"></i>&nbsp;&nbsp;Mes annonces
+                                </router-link>
                                 <router-link class="navbar-item" to="/aide" exact>
                                     <i class="fas fa-question"></i>&nbsp;&nbsp;Aide
                                 </router-link>

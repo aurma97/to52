@@ -1,5 +1,6 @@
 <template>
     <div>
+        <search></search>
         <div class="container">
             <div class="columns">
                 <div class="column">
@@ -28,7 +29,16 @@
                             </section>
                         </div>
                         <div class="column">
-                            
+                            <section>
+                                <b-field type="is-fullwidth"> 
+                                    <b-select placeholder="Trier">
+                                        <option>Tri : Prix croissants</option>
+                                        <option>Tri : Prix décroissants</option>
+                                        <option>Tri : Plus anciennes</option>
+                                        <option>Tri : Plus récentes</option>
+                                    </b-select>
+                                </b-field>
+                            </section>
                         </div>
                     </div>
                     <div class="" v-for="post in posts">
@@ -63,13 +73,13 @@
                         <div class="card">
                             <div class="card-image">
                                 <figure class="image is-4by3">
-                                <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                                    <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
                                 </figure>
                             </div>
                             <div class="card-content">
                                 <div class="media">
                                     <div class="media-content">
-                                        <p class="title is-4">{{special.title}}</p>
+                                        <router-link v-bind:to="'/annonce/'+ special.id"><p class="title is-4">{{special.title}}</p></router-link>
                                     </div>
                                     <div class="media-right">
                                         <span class="fas fa-heart"></span>
@@ -93,16 +103,19 @@
             </div>
             <hr>
         </div>
+    
+    
     </div>
 </template>
 
 <script>
+import Search from '../../components/search/Search.vue'
 export default {
     data(){
         return{
             posts : {},
             specials: {},
-            content: ''
+            content: '',
         }
     },
     methods:{
@@ -117,6 +130,9 @@ export default {
             this.specials = data.body.slice(20,24);
             //console.log(this.posts);
         });
+    },
+    components:{
+        'search': Search,
     }
 }
 </script>

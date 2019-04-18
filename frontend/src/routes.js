@@ -1,9 +1,9 @@
-// import addBlog from './components/addBlog.vue';
-// import showBlog from './components/showBlog.vue';
-// import singleBlog from './components/singleBlog.vue';
+import listPosts from './components/posts/listPosts.vue';
+import showPost from './components/posts/showPost.vue';
+import addPost from './components/posts/addPost.vue';
 
 export default[
-    //{ path: '/', redirect: '/admin'},
-    // { path: '/add', component:addBlog},
-    // { path: '/blog/:id', component:singleBlog},
+    { path: '/', component: listPosts},
+    { path: '/nouvelle-annonce', component:addPost},
+    { path: '/annonce/:id', component:showPost},
 ]
