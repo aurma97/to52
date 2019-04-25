@@ -10,6 +10,8 @@ Vue.use(Buefy)
 
 Vue.config.productionTip = false
 
+const ROOT_APP = 'http://localhost:8000';
+
 //Filters global
 // Vue.filter('to-uppercase', function(value){
 //   return value.toUpperCase();

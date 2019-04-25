@@ -12,37 +12,33 @@
             <div class="column is-3">
                 <section>
                     <b-field type="is-fullwidth" label="Catégorie *">
-                        <b-select placeholder="Selectionner une catégorie">
-                            <option>
-                                CrunchTime
+                        <b-select placeholder="Selectionner une catégorie" v-model="post.category">
+                            <option v-for="cat in categories">
+                                {{cat.title}}
                             </option>
                         </b-select>
                     </b-field>
                 </section>
                 <br>
                 <section>
-                        <b-field type="is-fullwidth" label="Type d'annonce *">
-                            <div class="block">
-                                <b-checkbox type="is-info" v-model="checkboxGroup" native-value="Flint">
-                                    Offres
-                                </b-checkbox>
-                                <b-checkbox type="is-info" v-model="checkboxGroup" native-value="Flint">
-                                    Demandes
-                                </b-checkbox>
-                            </div>
-                        </b-field>
+                        <div class="control">
+                            <label class="radio" v-for="typ in postType">
+                                <input type="radio" name="foobar" v-model="post.an_type" v-bind:value="typ.id">
+                                {{typ.title}}
+                            </label>
+                        </div>
                 </section>
                 <br>
                 <section>
                     <b-field label="Titre de l'annonce">
-                        <b-input type="is-fullwidth" placeholder="Exemple: location TV"></b-input>
+                        <b-input type="is-fullwidth" v-model="post.title" placeholder="Exemple: location TV"></b-input>
                     </b-field>
                 </section>
                 <br>
                 <section>
                      <b-field label="Prix *">
                         <p class="control has-icons-right">
-                            <input class="input" type="text">
+                            <input v-model="post.price" class="input" type="text">
                             <span class="icon is-small is-right">
                                 <i class="fas fa-euro-sign"></i>
                             </span>
@@ -53,32 +49,60 @@
             <div class="column">
                  <section>
                      <b-field type="is-fullwidth" label="Texte de l'annonce *">
-                        <b-input type="textarea"></b-input>
+                        <b-input v-model="post.content" type="textarea"></b-input>
                     </b-field>
                  </section>
                  <br>
                  <div class="columns">
                     <div class="column is-8">
+                        <h3 class="has-text-centered">Votre adresse</h3>
+                        <hr>
                         <section>
-                            <b-field label="Ville ou code postal *">
+                            <b-field label="Numéro de rue">
                                 <p class="control has-icons-left">
-                                    <input class="input" type="text">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-map-marked-alt"></i>
-                                    </span>
-                                </p>
-                            </b-field>
-                        </section>
-                        <br>
-                        <section>
-                            <b-field label="Adresse">
-                                <p class="control has-icons-left">
-                                    <input class="input" type="text">
+                                    <input v-model="post.num_street" class="input" type="text">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-map-pin"></i>
                                     </span>
                                 </p>
                             </b-field>
+
+                            <b-field label="Nom de rue">
+                                <p class="control has-icons-left">
+                                    <input v-model="post.street" class="input" type="text">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-map-pin"></i>
+                                    </span>
+                                </p>
+                            </b-field>
+
+                            <b-field label="Ville">
+                                <p class="control has-icons-left">
+                                    <input v-model="post.city" class="input" type="text">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-map-pin"></i>
+                                    </span>
+                                </p>
+                            </b-field>
+
+                            <b-field label="Code postal">
+                                <p class="control has-icons-left">
+                                    <input v-model="post.postalcode" class="input" type="text">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-map-pin"></i>
+                                    </span>
+                                </p>
+                            </b-field>
+
+                            <b-field label="Pays">
+                                <p class="control has-icons-left">
+                                    <input v-model="post.country" class="input" value="France" placeholder="France" type="text" disabled>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-map-pin"></i>
+                                    </span>
+                                </p>
+                            </b-field>
+
                         </section>
                     </div>
                     <div class="column">
@@ -93,7 +117,7 @@
             <div class="column is-2">
                 <section>
                     <b-field label="Joindre des images">
-                        <b-upload v-model="dropFiles"
+                        <b-upload v-model="post.thumb"
                             multiple
                             drag-drop>
                             <section class="section">
@@ -108,7 +132,7 @@
                     </b-field>
 
                     <div class="tags">
-                        <span v-for="(file, index) in dropFiles"
+                        <span v-bind="post.thumb"  v-for="(file, index) in post.thumb"
                             :key="index"
                             class="tag is-primary" >
                             {{file.name}}
@@ -121,7 +145,7 @@
                 </section>
                 <section>
                     <br>
-                    <b-button type="is-fullwidth is-info">Ajouter</b-button>
+                    <b-button type="is-fullwidth" @click="savePost" >Ajouter</b-button>
                 </section>
             </div>
         </div>
@@ -130,16 +154,47 @@
 </template>
 
 <script>
+import { ROOT_APP} from '../../main';
 export default {
      data() {
             return {
-                dropFiles: []
+                categories: [],
+                postType: [],
+                post : {
+                    title: '',
+                    an_type: '',
+                    price: '', 
+                    content: '',
+                    num_street: '',
+                    street: '',
+                    city: '',
+                    postalcode: '', 
+                    country: '',
+                    thumb: [],
+                    category: '',
+                    author: 2,
+                }
             }
         },
         methods: {
             deleteDropFile(index) {
-                this.dropFiles.splice(index, 1)
+                this.thumb.splice(index, 1)
+            },
+            savePost(){
+                console.log(this.post);
             }
+        },
+        created(){
+            this.$http.get('/api/category/').then(function(data){
+                this.categories = data.body;
+                console.log(this.category);
+                console.log("#########################")
+            });
+
+            this.$http.get('/api/post/type').then(function(data){
+                this.postType = data.body;
+                console.log(this.postType);
+            });
         }
 }
 </script>
