@@ -136,6 +136,10 @@ WEBPACK_LOADER = {
 }
 
 REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.MultiPartParser',  # multipart/form-data
+        'rest_framework.parsers.JSONParser',  # application/json
+    ),
     'DEFAULT_PERMISSION_CLASSES':(
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
@@ -145,3 +149,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
+MEDIA_URL="/media/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

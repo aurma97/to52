@@ -13,7 +13,7 @@
                 <section>
                     <b-field type="is-fullwidth" label="Catégorie *">
                         <b-select placeholder="Selectionner une catégorie" v-model="post.category">
-                            <option v-for="cat in categories">
+                            <option :value="cat.pk" v-for="cat in categories">
                                 {{cat.title}}
                             </option>
                         </b-select>
@@ -96,7 +96,7 @@
 
                             <b-field label="Pays">
                                 <p class="control has-icons-left">
-                                    <input v-model="post.country" class="input" value="France" placeholder="France" type="text" disabled>
+                                    <input v-model="post.country" class="input" value="France" type="text">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-map-pin"></i>
                                     </span>
@@ -119,6 +119,7 @@
                     <b-field label="Joindre des images">
                         <b-upload v-model="post.thumb"
                             multiple
+                            native
                             drag-drop>
                             <section class="section">
                                 <div class="content has-text-centered">
@@ -136,6 +137,7 @@
                             :key="index"
                             class="tag is-primary" >
                             {{file.name}}
+                            <img :src="file.url">
                             <button class="delete is-small"
                                 type="button"
                                 @click="deleteDropFile(index)">
@@ -149,17 +151,23 @@
                 </section>
             </div>
         </div>
-        
+        <div v-for="err in errors">
+           {{err}} 
+        </div>
     </div>
 </template>
 
 <script>
-import { ROOT_APP} from '../../main';
+import axios from 'axios'
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+
 export default {
      data() {
             return {
                 categories: [],
                 postType: [],
+                thumb : [],
                 post : {
                     title: '',
                     an_type: '',
@@ -169,11 +177,12 @@ export default {
                     street: '',
                     city: '',
                     postalcode: '', 
-                    country: '',
                     thumb: [],
+                    country: 'France',
                     category: '',
                     author: 2,
-                }
+                },
+                errors: []
             }
         },
         methods: {
@@ -181,19 +190,25 @@ export default {
                 this.thumb.splice(index, 1)
             },
             savePost(){
-                console.log(this.post);
+                console.log(this.thumb);
+    
+                axios.post(`/api/post/`, this.post)
+                .then(response => {
+                    this.post = {}
+                    console.log(response.data)
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                })
             }
         },
         created(){
-            this.$http.get('/api/category/').then(function(data){
-                this.categories = data.body;
-                console.log(this.category);
-                console.log("#########################")
+            axios.get('/api/category/').then(response =>{
+                this.categories = response.data;
             });
 
-            this.$http.get('/api/post/type').then(function(data){
-                this.postType = data.body;
-                console.log(this.postType);
+            axios.get('/api/post/type').then(response =>{
+                this.postType = response.data;
             });
         }
 }

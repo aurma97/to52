@@ -22,6 +22,8 @@ Vue.filter('snippet', function(value){
 });
 
 Vue.use(VueResource);
+//Vue.http.headers.common['Authorization'] = 'Basic YXBpOnBhc3N3b3Jk';
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({
