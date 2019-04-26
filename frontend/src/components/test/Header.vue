@@ -76,6 +76,8 @@
 
 <script>
 import axios from 'axios'
+import {bus} from '../../main'
+
 export default {
     data(){
         return{
@@ -86,10 +88,15 @@ export default {
     computed : {
       connected : function(){ return this.$store.getters.isLoggedIn}
     },
+    created(){
+    },
     mounted(){
         axios.get('/api/user/').then(response =>{
                 this.username = response.data;
             });
+        // bus.$on('username', (data) => {
+        //     this.username = data
+        // })
     },
     methods: {
         logout: function () {

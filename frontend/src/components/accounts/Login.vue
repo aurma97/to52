@@ -61,6 +61,9 @@
 <script>
 import Forgot from './Forgot.vue'
 import axios from 'axios'
+import {bus} from '../../main'
+
+
 export default {
     components: {
         'forgot': Forgot
@@ -80,7 +83,8 @@ export default {
         .then(() => 
             axios.post('/api/login/', {username, password})
                 .then(response =>{
-        
+                    //bus.$emit('username', username)
+                    window.location.href = "/";
                 })  
             )       
         .catch(err => console.log(err))

@@ -25,6 +25,8 @@ const router = new VueRouter({
   mode:'hash'
 });
 
+export const bus = new Vue();
+
 new Vue({
   store,
   router: router,
