@@ -38,8 +38,6 @@
                         <router-link class="navbar-item" to="/inscription" exact v-if="!connected">
                             <i class="fas fa-file-alt"></i>&nbsp;&nbsp;Inscription
                         </router-link>
-
-
                         <div class="navbar-item has-dropdown is-hoverable" v-if="connected">
                             <a class="navbar-link">
                                 Bonjour {{username}}
@@ -88,20 +86,24 @@ export default {
     computed : {
       connected : function(){ return this.$store.getters.isLoggedIn}
     },
-    created(){
-        if (this.connected){
-            axios.get('/api/user').then(response =>{
-                //console.log(response.data);
-                this.username = response.data
+    mounted(){
+        axios.get('/api/user/').then(response =>{
+                this.username = response.data;
             });
-        }  
     },
     methods: {
         logout: function () {
             this.$store.dispatch('logout')
             .then(() => {
+                 axios.post('/api/logout/')
+                .then(response =>{
+                    console.log(response)
+                }); 
             this.$router.push('/#/connexion')
             })
+        },
+        show(){
+            console.log(this.$store);
         }
     }
 }

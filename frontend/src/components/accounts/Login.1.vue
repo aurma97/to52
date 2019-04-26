@@ -36,7 +36,7 @@
                             
                             <div class="field">
                                 <p class="control">
-                                    <button class="button is-success is-medium" @click.prevent="login">
+                                    <button class="button is-success is-medium" @click.prevent="authenticate">
                                         Connexion
                                     </button>
                                 </p>
@@ -69,22 +69,65 @@ export default {
         return {
             username: '',
             password: '',
-            isCardModalActive: false,
+            isCardModalActive: false
         }
     },
     methods:{
         login: function () {
             let username = this.username
             let password = this.password
-            this.$store.dispatch('login', { username, password })
-        .then(() => 
-            axios.post('/api/login/', {username, password})
-                .then(response =>{
-        
-                })  
-            )       
+            this.$store.dispatch('obtain_token', { username, password })
+        .then(() => this.$router.push('/'))
         .catch(err => console.log(err))
-        }    
+        },
+        authenticate () {
+      const payload = {
+        username: this.username,
+        password: this.password
+      }
+      axios.post(this.$store.state.endpoints.obtainJWT, payload)
+        .then((response) => {
+          this.$store.commit('updateToken', response.data.token)
+          // get and set auth user
+          const base = {
+            baseURL: this.$store.state.endpoints.baseUrl,
+            headers: {
+            // Set your Authorization to 'JWT', not Bearer!!!
+              Authorization: `JWT ${this.$store.state.jwt}`,
+              'Content-Type': 'application/json'
+            },
+            xhrFields: {
+                withCredentials: true
+            }
+          }
+          // Even though the authentication returned a user object that can be
+          // decoded, we fetch it again. This way we aren't super dependant on
+          // JWT and can plug in something else.
+          const axiosInstance = axios.create(base)
+          axiosInstance({
+            url: "/",
+            method: "get",
+            params: {}
+          })
+            .then((response) => {
+              this.$store.commit("setAuthUser",
+                {authUser: response.data, isAuthenticated: true}
+              )
+                axios.post('/api/login/', payload)
+                .then(response =>{
+                    console.log(response)
+                }); 
+              this.$router.push('/')
+              //location.reload();
+            })
+
+        })
+        .catch((error) => {
+          console.log(error);
+          console.debug(error);
+          console.dir(error);
+        })
+    }    
     }
 }
 </script>

@@ -16,7 +16,9 @@ urlpatterns = [
     ),
     path('api/obtain_token', obtain_jwt_token),
     path('api/refresh_token', refresh_jwt_token),
-    path('api/user/', views.current_user)
+    path('api/user/', views.current_user),
+    path('api/login/', views.login_user),
+    path('api/logout/', views.logout_user)
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

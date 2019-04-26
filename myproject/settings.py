@@ -146,9 +146,6 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser',  # multipart/form-data
         'rest_framework.parsers.JSONParser',  # application/json
     ),
-    'DEFAULT_PERMISSION_CLASSES':(
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ),
     'DEFAULT_AUTHENTICATION_CLASSES':(
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
