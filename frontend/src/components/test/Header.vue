@@ -39,9 +39,10 @@
                             <i class="fas fa-file-alt"></i>&nbsp;&nbsp;Inscription
                         </router-link>
 
+
                         <div class="navbar-item has-dropdown is-hoverable" v-if="connected">
                             <a class="navbar-link">
-                                Bonjour Marcel
+                                Bonjour {{username}}
                             </a>
                             <div class="navbar-dropdown">
                                 <router-link class="navbar-item" to="/mon-compte" exact>
@@ -76,15 +77,24 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data(){
         return{
             active: false,
-            //connected: false
+            username: ''
         }
     },
     computed : {
       connected : function(){ return this.$store.getters.isLoggedIn}
+    },
+    created(){
+        if (this.connected){
+            axios.get('/api/user').then(response =>{
+                //console.log(response.data);
+                this.username = response.data
+            });
+        }  
     },
     methods: {
         logout: function () {

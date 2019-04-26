@@ -5,9 +5,25 @@ import login from './components/accounts/Login.vue';
 import register from './components/accounts/Register.vue';
 
 export default[
-    { path: '/', component: listPosts},
-    { path: '/nouvelle-annonce', component:addPost},
-    { path: '/connexion', component:login},
-    { path: '/inscription', component:register},
-    { path: '/annonce/:id', component:showPost},
+    { 
+        path: '/', 
+        component: listPosts
+    },
+    { 
+        path: '/nouvelle-annonce', 
+        component:addPost, 
+        meta: { 
+            requiresAuth: true
+        }
+    },
+    { 
+        path: '/connexion', 
+        component:login
+    },
+    { 
+        path: '/inscription', component:register
+    },
+    { 
+        path: '/annonce/:id', component:showPost
+    },
 ]
