@@ -5,26 +5,20 @@ import VueRouter from 'vue-router'
 import Routes from './routes'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
+import axios from 'axios'
+import store from './store/store'
 
 Vue.use(Buefy)
+Vue.use(VueResource);
+Vue.use(VueRouter);
 
 Vue.config.productionTip = false
 
-const ROOT_APP = 'http://localhost:8000';
+const token = localStorage.getItem('token')
 
-//Filters global
-// Vue.filter('to-uppercase', function(value){
-//   return value.toUpperCase();
-// });
-
-Vue.filter('snippet', function(value){
-  return value.slice(0,100) + '...';
-});
-
-Vue.use(VueResource);
-//Vue.http.headers.common['Authorization'] = 'Basic YXBpOnBhc3N3b3Jk';
-
-Vue.use(VueRouter);
+if (token){
+  axios.defaults.headers.common['Authorization'] = token
+}
 
 const router = new VueRouter({
   routes: Routes,
@@ -32,6 +26,7 @@ const router = new VueRouter({
 });
 
 new Vue({
-  render: h => h(App),
-  router: router
+  store,
+  router: router,
+  render: h => h(App)
 }).$mount('#app')

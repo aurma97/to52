@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -12,6 +13,8 @@ urlpatterns = [
         TemplateView.as_view(template_name="application.html"),
         name="app",
     ),
+    path('api/obtain_token', obtain_jwt_token),
+    path('api/refresh_token', refresh_jwt_token),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

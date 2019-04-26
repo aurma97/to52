@@ -22,16 +22,24 @@
                         </div>
                     </div>
                     <div class="navbar-end">
-                        <router-link class="navbar-item" to="/nouvelle-annonce" exact>
+                        <router-link class="navbar-item" to="/nouvelle-annonce" exact v-if="connected">
                             <i class="fas fa-plus-square"></i>&nbsp;&nbsp;Déposer une annonce
                         </router-link>
-                        <router-link class="navbar-item" to="/mes-favoris" exact>
+                        <router-link class="navbar-item" to="/mes-favoris" exact v-if="connected">
                             <i class="fas fa-heart"></i>&nbsp;&nbsp;Mes favoris
                         </router-link>
-                        <router-link class="navbar-item" to="/mes-messages" exact>
+                        <router-link class="navbar-item" to="/mes-messages" exact v-if="connected">
                             <i class="fas fa-inbox"></i>&nbsp;&nbsp;Messages
                         </router-link>
-                        <div class="navbar-item has-dropdown is-hoverable">
+
+                        <router-link class="navbar-item" to="/connexion" exact v-if="!connected">
+                            <i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Connexion
+                        </router-link>
+                        <router-link class="navbar-item" to="/inscription" exact v-if="!connected">
+                            <i class="fas fa-file-alt"></i>&nbsp;&nbsp;Inscription
+                        </router-link>
+
+                        <div class="navbar-item has-dropdown is-hoverable" v-if="connected">
                             <a class="navbar-link">
                                 Bonjour Marcel
                             </a>
@@ -47,12 +55,12 @@
                                 </router-link>
                                 <div class="navbar-divider"></div>
                                 <span class="navbar-item">
-                                    <router-link class="button is-link is-inverted" to="/mes-messages" exact>
+                                    <a class="button is-link is-inverted" @click="logout" exact>
                                         <span class="icon">
                                         <i class="fas fa-sign-out-alt "></i>
                                         </span>
                                         <span>Déconnexion</span>
-                                    </router-link>
+                                    </a>
                                 </span>
                             </div>
                         </div>
@@ -72,9 +80,19 @@ export default {
     data(){
         return{
             active: false,
+            //connected: false
         }
     },
+    computed : {
+      connected : function(){ return this.$store.getters.isLoggedIn}
+    },
     methods: {
+        logout: function () {
+            this.$store.dispatch('logout')
+            .then(() => {
+            this.$router.push('/#/connexion')
+            })
+        }
     }
 }
 </script>

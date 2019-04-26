@@ -1,7 +1,8 @@
 <template>
     <div>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
       <app-header></app-header>
       <!-- <list-posts></list-posts> -->
       <router-view></router-view>
@@ -25,7 +26,18 @@ export default {
       return {
         component:''
       }
-    }
+    },
+    created: function () {
+    this.$http.interceptors.response.use(undefined, function (err) {
+      return new Promise(function (resolve, reject) {
+        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch(logout)
+        }
+        throw err;
+      });
+    });
+  }
+
 }
 </script> 
 <style scoped>

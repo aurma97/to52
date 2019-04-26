@@ -9,6 +9,8 @@ from .serializer import PostSerializer, PostTypeSerializer
 class PostAPIView(mixins.CreateModelMixin, generics.ListAPIView):
     lookup_field = 'pk'
     serializer_class= PostSerializer
+    #authentication_class= (JSONWebTokenAuthentication,)
+    #permission_classes= (IsAuthenticated,)
 
     def get_queryset(self): #for searching
         qs= Post.objects.all()
