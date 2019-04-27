@@ -5,11 +5,11 @@
                 <div class="column is-7">
                     <section>
                         <div class="block">
-                            <b-radio v-model="radio"
+                            <b-radio
                                 native-value="Offres" type="is-info">
                                 Offres
                             </b-radio>
-                            <b-radio v-model="radio"
+                            <b-radio
                                 native-value="Demandes" type="is-info">
                                 Demandes
                             </b-radio>

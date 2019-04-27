@@ -6,27 +6,27 @@
                 <div class="column">
                     <div class="columns">
                         <div class="column is-2">
-                            <strong>200 000 Annonces</strong>
+                            <strong>{{posts.length}} Annonces</strong>
                         </div>
                         <div class="column">
-                            <section>
+                            <!-- <section>
                                 <div class="block">
-                                    <b-checkbox type="is-info" v-model="checkboxGroup"
+                                    <b-checkbox type="is-info"
                                         native-value="Flint">
                                         Etudiants <strong><span class="has-text-link">100 000</span></strong>
                                     </b-checkbox>
                                 </div>
-                            </section>
+                            </section> -->
                         </div>
                         <div class="column">
-                            <section>
+                            <!-- <section>
                                 <div class="block">
-                                    <b-checkbox type="is-info" v-model="checkboxGroup"
+                                    <b-checkbox type="is-info"
                                         native-value="Flint">
                                         Personnel <strong><span class="has-text-link">100 000</span></strong>
                                     </b-checkbox>
                                 </div>
-                            </section>
+                            </section> -->
                         </div>
                         <div class="column">
                             <section>
@@ -41,11 +41,11 @@
                             </section>
                         </div>
                     </div>
-                    <div class="" v-for="post in posts">
+                    <div class="notification" v-for="post in posts">
                         <article class="media">
                             <figure class="media-left">
                                 <p class="image is-128x128">
-                                    <img v-bind:src="post.url">
+                                    <img v-bind:src="url+post.image_one">
                                 </p>
                             </figure>
                             <div class="media-content">
@@ -53,11 +53,11 @@
                                     <p>
                                         <router-link v-bind:to="'/annonce/'+ post.id"><h3>{{post.title}}</h3></router-link>
                                         <br>
-                                        {{content}}
+                                        {{post.content}}
                                         <p>
-                                            Covoiturage <br>
-                                            Belfort 90000 <br>
-                                            Hier, 23h58 
+                                             {{post.Category_title}}<br>
+                                            {{post.city}} {{post.postalcode}} <br>
+                                            {{post.created_at}}
                                         </p>
                                     </p>
                                 </div>
@@ -66,6 +66,7 @@
                                 <span class="fas fa-heart"></span>
                             </div>
                         </article>
+                        
                     </div>
                 </div>
                 <div class="column is-3">
@@ -73,7 +74,7 @@
                         <div class="card">
                             <div class="card-image">
                                 <figure class="image is-4by3">
-                                    <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                                    <img :src="url+special.image_one" alt="Placeholder image">
                                 </figure>
                             </div>
                             <div class="card-content">
@@ -86,12 +87,11 @@
                                     </div>
                                 </div>
                                 <div class="content">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Phasellus nec iaculis mauris.
+                                {{special.content}}
                                 <hr>
                                 <p>
-                                    Locations<br>
-                                    Belfort 90000
+                                    {{special.Category_title}}<br>
+                                    {{special.city}} {{special.postalcode}}
                                 </p>
                                 </div>
                             </div>
@@ -110,25 +110,22 @@
 
 <script>
 import Search from '../../components/search/Search.vue'
+import axios from 'axios'
 export default {
     data(){
         return{
-            posts : {},
+            posts: {},
             specials: {},
-            content: '',
+            url: '/media/'
         }
     },
     methods:{
-          randomContent(){
-              return this.content = Math.random().toString(36).substring(2, 150) + Math.random().toString(36).substring(2, 150);
-          }
+
     },
     created(){
-        this.$http.get('https://jsonplaceholder.typicode.com/photos').then(function(data){
-            this.content = this.randomContent();
-            this.posts = data.body.slice(0,20);
-            this.specials = data.body.slice(20,24);
-            //console.log(this.posts);
+        axios.get('/api/post/all').then(response =>{
+            this.posts = response.data;
+            this.specials = response.data.slice(0, 2);
         });
     },
     components:{
