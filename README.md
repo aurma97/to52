@@ -1,9 +1,9 @@
-# to52
+# TO52
 Ad manager app using Django Rest Framework and VueJs
 
-##Setting up the project
+## Setting up the project
 
-###For Python
+### For Python
 $ pipenv shell
 $ pip install django
 $ pip install six
@@ -15,9 +15,9 @@ $ pip install django-webpack-loader
 $ pip install pillow
 $ ./manage.py migrate
 
-###For Vue
+### For Vue
 $ npm install
 
-##Launching the servers
+## Launching the servers
 $ ./manage.py runserver
 $ npm run serve
